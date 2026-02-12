@@ -1,6 +1,7 @@
-# version: "3.9"
+version: "3.9"
 
 services:
+
   oracle:
     image: loliconneko/oracle-ee-11g
     container_name: oracle-db
@@ -13,23 +14,24 @@ services:
       - "1521:1521"
     volumes:
       - oracle-data:/opt/oracle/oradata
+      - ./docker/oracle/init-scripts:/docker-entrypoint-initdb.d
     networks:
-      - kolotv-net
+      - socobis-net
 
-  kolotv-app:
+  socobis-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: kolotv-wildfly
+    container_name: socobis-wildfly
     depends_on:
       - oracle
     ports:
       - "8080:8080"
     networks:
-      - kolotv-net
+      - socobis-net
 
 networks:
-  kolotv-net:
+  socobis-net:
 
 volumes:
   oracle-data:
